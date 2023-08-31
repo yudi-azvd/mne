@@ -2,10 +2,13 @@ set -e
 
 includes="-I../lib -I../src"
 
-# NOTE: Na primeira vez que executar esse script descomente a linha abaixo.
-# As próximas execuções podem ser executadas com ela comentada.
-
-# g++ $includes -o main.test.o -c main.test.cpp
+# https://serverfault.com/questions/7503/how-to-determine-if-a-bash-variable-is-empty
+# NOTE: É necessário fazer a compilação de main.test.o apenas 1 vez.
+# Se tiver algo no primeiro argumento, essa compilação ocorre.
+if [[ $1 ]]
+then
+    g++ $includes -o main.test.o -c main.test.cpp
+fi
 
 g++ \
     -g \
