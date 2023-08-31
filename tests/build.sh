@@ -14,6 +14,12 @@ g++ \
     -g \
     -lm \
     $includes \
-    roots.test.cpp \
+    \
+    ../src/roots.cpp \
+    ../src/functions.cpp \
+    \
+    bisection.test.cpp \
+    regula_falsi.test.cpp \
+    \
     main.test.o \
     -o test

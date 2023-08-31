@@ -2,14 +2,7 @@
 
 #include "roots.h"
 #include "test_defs.h"
-
-float sqrt_of_2(float x) {
-    return x * x - 2.0;
-}
-
-float sqrt_of_4(float x) {
-    return x * x - 4.0;
-}
+#include "functions.h"
 
 TEST_CASE("bisection") {
     CHECK(approx_eps(1.41406, 0.01) == root_bisection(sqrt_of_2, 0, 2));
