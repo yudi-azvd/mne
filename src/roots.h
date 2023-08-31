@@ -12,4 +12,4 @@ typedef float (*Function)(float);
 
 float root_bisection(Function f, float x1 = 0.0, float x2 = 1.0, float rel_err = 0.01);
 
-float root_regula_falsi(Function f, float x1 = 0.0, float x2 = 1.0, float rel_err = 0.01);
+float root_false_position(Function f, float x1 = 0.0, float x2 = 1.0, float rel_err = 0.01);

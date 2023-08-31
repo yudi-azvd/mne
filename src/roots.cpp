@@ -26,7 +26,7 @@ float root_bisection(Function f, float x1, float x2, float rel_err) {
     return root;
 }
 // False posição
-float root_regula_falsi(Function f, float x1, float x2, float rel_err) {
+float root_false_position(Function f, float x1, float x2, float rel_err) {
     uint iterations = 0;
     float xi = 0;
     float f_x1 = 0;

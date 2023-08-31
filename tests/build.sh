@@ -19,7 +19,7 @@ g++ \
     ../src/functions.cpp \
     \
     bisection.test.cpp \
-    regula_falsi.test.cpp \
+    false_position.test.cpp \
     \
     main.test.o \
     -o test
