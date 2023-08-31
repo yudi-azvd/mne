@@ -1,14 +1,14 @@
 #include "doctest.h"
-#include "roots.h"
 
-#include "defs.h"
+#include "roots.h"
+#include "test_defs.h"
 
 float f(float x) {
-    return x;
+    return x * x - 2;
 }
 
 TEST_CASE("bisection") {
-    CHECK(root_bisection(f) == doctest::Approx(0.2));
-    CHECK(root_bisection(f) == approx(0.2));
-    CHECK(root_bisection(f) == approx_eps(0.2, 0.1));
+    CHECK(approx(1.41406) == root_bisection(f, 0, 2));
+    
+    CHECK(approx_eps(1.41, 0.1) == root_bisection(f, 0, 2));
 }
