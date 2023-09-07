@@ -10,20 +10,31 @@ def _rel_err(a: float, b: float):
 
 Function = Callable[[float], float]
 
-def root_bisection(f: Function, x1: float, x2: float, rel_err: float = 0.01) -> float:
+class RootResult:
+    root: float = 0
+    iterations: float = 0
+    x1s: list[float] = []
+    x2s: list[float] = []
+    roots: list[float] = []
+
+def root_bisection(f: Function, x1: float, x2: float, rel_err: float = 0.01, iterations: int = MAX_ITER) -> float:
+    res = RootResult()
     iterations = 0
-    root = 0
+    res.root = 0
 
     while _rel_err(x2, x1) > rel_err and iterations < MAX_ITER:
-        root = (x1 + x2)/2
+        res.root = (x1 + x2)/2
     
-        if f(root) == 0:
-            return root
-        if f(x1)*f(root) < 0:
-            x2 = root
+        if f(res.root) == 0:
+            return res.root
+        if f(x1)*f(res.root) < 0:
+            x2 = res.root
         else:
-            x1 = root
+            x1 = res.root
         
+        res.x1s.append(x1)
+        res.x2s.append(x2)
+        res.roots.append(res.root)
         iterations += 1
 
-    return root
+    return res.root

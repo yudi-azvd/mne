@@ -1,7 +1,20 @@
 # Métodos Numéricos para Engenharia
 
+## Dependências 
+
+- Python 3.10+
+- GCC
+
 ## Testes
 
+### Python
+
+    pip install -r requirements.txt
+    pytest
+
+Pra executar um determinado exercício:
+
+    python -m mne.exercises.chap1
 ### C
 
     cd tests
@@ -16,9 +29,3 @@ Nas builds subsequentes não é necessário passar argumentos para
     ./build.sh && ./test
 
 Para mais informações, leia: [tests/build.sh](tests/build.sh).
-
-
-### Python
-
-    pip install -r requirements.txt
-    pytest
