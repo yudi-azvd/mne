@@ -10,7 +10,7 @@ def _rel_err(a: float, b: float):
 
 Function = Callable[[float], float]
 
-class RootResult:
+class ClosedResult:
     root: float = 0
     iterations: float = 0
     x1s: list[float] = []
@@ -31,8 +31,8 @@ root       {1}
 iterations {2}'''.format(self.roots, self.root, self.iterations)
 
 
-def root_bisection(f: Function, x1: float, x2: float, rel_err: float = 0.01, iterations: int = MAX_ITER) -> float:
-    res = RootResult()
+def root_bisection(f: Function, x1: float, x2: float, rel_err: float = 0.01, iterations: int = MAX_ITER) -> ClosedResult:
+    res = ClosedResult()
     iter = 0
     res.root = 0
 
@@ -40,7 +40,8 @@ def root_bisection(f: Function, x1: float, x2: float, rel_err: float = 0.01, ite
         res.root = (x1 + x2)/2
     
         if f(res.root) == 0:
-            return res.root
+            return res
+            
         if f(x1)*f(res.root) < 0:
             x2 = res.root
         else:
@@ -51,9 +52,10 @@ def root_bisection(f: Function, x1: float, x2: float, rel_err: float = 0.01, ite
         res.roots.append(res.root)
         iter += 1
 
-    return res.root
+    return res
 
 
-def root_false_position(f: Function, x1: float, x2: float, rel_err: float = 0.01, iterations: int = MAX_ITER) -> float:
-    return .0
+def root_false_position(f: Function, x1: float, x2: float, rel_err: float = 0.01, iterations: int = MAX_ITER) -> ClosedResult:
+    res = ClosedResult()
+    return res
     
