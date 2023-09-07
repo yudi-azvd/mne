@@ -3,7 +3,7 @@
 ## Dependências 
 
 - Python 3.10+
-- GCC
+- g++
 
 ## Testes
 
@@ -15,6 +15,7 @@
 Pra executar um determinado exercício:
 
     python -m mne.exercises.chap1
+
 ### C
 
     cd tests

@@ -17,12 +17,26 @@ class RootResult:
     x2s: list[float] = []
     roots: list[float] = []
 
+    def __init__(self) -> None:
+        self.root = 0
+        self.iterations = 0
+        self.x1s = []
+        self.x2s = []
+        self.roots = []
+
+    def __repr__(self) -> str:
+        return '''
+roots      {0} 
+root       {1} 
+iterations {2}'''.format(self.roots, self.root, self.iterations)
+
+
 def root_bisection(f: Function, x1: float, x2: float, rel_err: float = 0.01, iterations: int = MAX_ITER) -> float:
     res = RootResult()
-    iterations = 0
+    iter = 0
     res.root = 0
 
-    while _rel_err(x2, x1) > rel_err and iterations < MAX_ITER:
+    while _rel_err(x2, x1) > rel_err and iter < iterations:
         res.root = (x1 + x2)/2
     
         if f(res.root) == 0:
@@ -35,6 +49,11 @@ def root_bisection(f: Function, x1: float, x2: float, rel_err: float = 0.01, ite
         res.x1s.append(x1)
         res.x2s.append(x2)
         res.roots.append(res.root)
-        iterations += 1
+        iter += 1
 
     return res.root
+
+
+def root_false_position(f: Function, x1: float, x2: float, rel_err: float = 0.01, iterations: int = MAX_ITER) -> float:
+    return .0
+    
