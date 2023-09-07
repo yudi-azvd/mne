@@ -2,6 +2,8 @@
 
 ## Testes
 
+### C
+
     cd tests
 
 Se é a primeira vez executando os testes:
@@ -14,3 +16,9 @@ Nas builds subsequentes não é necessário passar argumentos para
     ./build.sh && ./test
 
 Para mais informações, leia: [tests/build.sh](tests/build.sh).
+
+
+### Python
+
+    pip install -r requirements.txt
+    pytest
