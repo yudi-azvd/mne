@@ -12,5 +12,3 @@ def test_root_nr():
     res = root_nr(sqrt_of_4, f_prime, 0.01)
     assert res.iterations < MAX_ITER
     assert approx(2.0, 0.1) == res.root
-
-    print(res)

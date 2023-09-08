@@ -28,5 +28,12 @@
                 // }
             ]
         },
+        {
+            "name": "Python exercise",
+            "type": "python",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "module": "mne.exercises.chap1.ex_5_1"
+        }
     ]
 }

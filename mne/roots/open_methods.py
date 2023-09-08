@@ -10,11 +10,9 @@ def _rel_err(a: float, b: float):
 
 Function = Callable[[float], float]
 
-class RootResult:
+class OpenResult:
     root: float = 0
     iterations: float = 0
-    x1s: list[float] = []
-    x2s: list[float] = []
     roots: list[float] = []
 
     def __init__(self) -> None:
@@ -30,23 +28,27 @@ roots      {0}
 root       {1} 
 iterations {2}'''.format(self.roots, self.root, self.iterations)
 
-    
 
-def root_nr(f: Function, fprime: Function, x0: float, abs_err: float = 0.01, interations: int = MAX_ITER):
+def root_fixed_point(f: Function, fprime: Function, x0: float, rel_err: float = 0.01, interations: int = MAX_ITER):
+    return .0
+
+
+def root_nr(f: Function, fprime: Function, x0: float, rel_err: float = 0.01, interations: int = MAX_ITER):
     '''Método de Newton-Raphson'''
-    res = RootResult()
+    res = OpenResult()
     x = 0
     prev_x = x0
     iter = 0
 
-    while abs(x - prev_x) > abs_err and iter < interations: 
-        prev_x = x
-        x = prev_x - f(prev_x)/fprime(prev_x)
-        # FIXME: essa linha interrompe a condição de parada muito antes do que deveria
+    while True: 
         iter += 1
+        x = prev_x - f(prev_x)/fprime(prev_x)
         res.roots.append(x)
+
+        if abs(x - prev_x) < rel_err or iter > interations:
+            break
+        prev_x = x
 
     res.iterations = iter
     res.root = x
     return res
-
