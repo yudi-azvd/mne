@@ -11,10 +11,10 @@ def test_root_bisection():
 
 
 def test_root_bisection_stop_option():
-    res = root_bisection(sqrt_of_2, 0, 2, iterations=3, option=StopOption.ITERATIONS)
+    res = root_bisection(sqrt_of_2, 0, 2, max_iterations=3, option=StopOption.ITERATIONS)
     # print(res.xr)
     assert res.iterations == 3
 
 
 def test_root_bisection_exact():
-    assert approx(2, 0.1) == root_bisection(sqrt_of_4, 0.0, 4.0).xr
+    assert approx(2, 0.1) == root_bisection(sqrt_of_4, 0, 4).xr

@@ -4,7 +4,7 @@ def ex_5_1():
     def f(x: float) -> float:
         return -.5*x**2 + 2.5*x + 4.5
 
-    res = root_bisection(f, 5, 10, iterations=3)
+    res = root_bisection(f, 5, 10, max_iterations=3)
 
     print(res)
     return

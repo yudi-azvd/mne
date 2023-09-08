@@ -2,14 +2,9 @@ from collections.abc import Callable
 from tabulate import tabulate
 from enum import Enum
 
+from mne.roots.common import ea_alt
+
 MAX_ITER = 10_000
-
-def _abs_err(a: float, b: float):
-    return abs(a - b)
-
-def _rel_err(a: float, b: float):
-    '''a < b'''
-    return abs((b - a) / (b + a))
 
 Function = Callable[[float], float]
 
@@ -20,7 +15,7 @@ class ClosedResult:
     x1s: list[float] = []
     x2s: list[float] = []
     xrs: list[float] = []
-    rel_errs: list[float] = []
+    eas: list[float] = []
 
     def __init__(self) -> None:
         self.xr = 0
@@ -28,57 +23,70 @@ class ClosedResult:
         self.x1s = []
         self.x2s = []
         self.xrs = []
-        self.rel_errs = []
+        self.eas = []
 
     def __repr__(self) -> str:
         table = []
         for i, _ in enumerate(self.xrs):
-            table.append([i, self.xrs[i], self.x1s[i], self.x2s[i], self.rel_errs[i]])
-        s = tabulate(table, headers=['i', 'root', 'x1', 'x2', 'rel e'], floatfmt='.4f')
+            table.append([i, self.x1s[i], self.x2s[i], self.xrs[i], self.eas[i]])
+        s = tabulate(table, headers=['i', 'x1', 'x2', 'xr', 'ea %'], floatfmt='.4f')
         return s + f'\n\nroot {self.xr}'
 
 
-class StopOption:
+class StopOption(Enum):
     ITERATIONS = 0
     REL_ERROR = 1
 
-def check_stop(x1: float, x2: float, rel_err: float, iter: int, 
-               iterations: int, option: StopOption
+
+def should_stop(
+    _ea: float, _rel_err: float, iter: int, 
+    max_iterations: int, option: StopOption
 ):
     if option == StopOption.REL_ERROR:
-        return _rel_err(x2, x1) > rel_err and iter < iterations
-    return iter < iterations
+        return _ea < _rel_err or iter >= max_iterations
+    return iter >= max_iterations
     
 
-def root_bisection(f: Function, x1: float, x2: float, 
-                   rel_err: float = 0.01, iterations: int = MAX_ITER, 
-                   option: StopOption = StopOption.REL_ERROR
+def root_bisection(
+    f: Function, x1: float, x2: float, 
+    _rel_err: float = 0.01, max_iterations: int = MAX_ITER, 
+    option: StopOption = StopOption.REL_ERROR
 ) -> ClosedResult:
+
     res = ClosedResult()
     res.xr = 0
     res.f = f
-    iter = 0
+    # OPT:
+    f1 = f(x1)
 
-    # while _rel_err(x2, x1) > rel_err and iter < iterations:
-    while check_stop(x1, x2, rel_err, iter, iterations, option):
+    while True:
+        _ea = ea_alt(x1, x2)
+
         res.x1s.append(x1)
         res.x2s.append(x2)
-        res.rel_errs.append(_rel_err(x1, x2))
+        res.eas.append(_ea)
 
         res.xr = (x1 + x2)/2
+        # OPT:
+        fr = f(res.xr)
         res.xrs.append(res.xr)
     
-        if f(res.xr) == 0:
-            return res
-            
-        if f(x1)*f(res.xr) < 0:
+        # test = f(x1)*f(res.xr)
+        # OPT:
+        test = f1*fr
+        if test < 0:
             x2 = res.xr
-        else:
+        elif test > 0:
             x1 = res.xr
+            # OPT:
+            f1 = fr
+        else:
+            res.eas.append(0)
+            return res
         
-        iter += 1
-
-    res.iterations = iter
+        res.iterations += 1
+        if should_stop(_ea, _rel_err, res.iterations, max_iterations, option):
+            break
     return res
 
 

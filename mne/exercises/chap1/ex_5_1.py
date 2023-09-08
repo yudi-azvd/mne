@@ -7,7 +7,7 @@ def f(x: float) -> float:
     
     
 def main():
-    res = root_bisection(f, 5, 10, iterations=10, option=StopOption.ITERATIONS)
+    res = root_bisection(f, 5, 10, max_iterations=10, option=StopOption.ITERATIONS)
     plot_closed_result(res, step=0.05)
     print(res)
 

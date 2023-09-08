@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+
 from mne.roots.closed_methods import ClosedResult
 
 
@@ -30,7 +31,7 @@ def plot_closed_result(result: ClosedResult, step: float=0.1) -> None:
     plt.axis([xl, xu, min(values), max(values)])
 
     plt.grid(visible=True)
-    plt.plot(xs, result.f(xs))
+    plt.plot(xs, values)
     plt.plot([x1], [0], 'bo')
     plt.plot([x2], [0], 'bo')
 

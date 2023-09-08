@@ -2,12 +2,6 @@ from collections.abc import Callable
 
 MAX_ITER = 10_000
 
-def _abs_err(a: float, b: float):
-    return abs(a - b)
-
-def _rel_err(a: float, b: float):
-    return ((a - b) / (a + b))
-
 Function = Callable[[float], float]
 
 class OpenResult:
