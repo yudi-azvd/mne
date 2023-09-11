@@ -4,13 +4,12 @@ from enum import Enum
 
 from mne.roots.common import ea_alt
 
-MAX_ITER = 10_000
+MAX_ITER = 100_000
 
 Function = Callable[[float], float]
 
 class ClosedResult:
     f: Function
-    xt: float | None
     xr: float = 0
     iterations: float = 0
     x1s: list[float] = []
@@ -19,7 +18,6 @@ class ClosedResult:
     eas: list[float] = []
 
     def __init__(self) -> None:
-        self.xt = None
         self.xr = 0
         self.iterations = 0
         self.x1s = []
@@ -29,12 +27,11 @@ class ClosedResult:
 
     def to_str(self, xt: float | None = None) -> str:
         table = []
-        if self.xt == None:
+        if xt == None:
             for i, _ in enumerate(self.xrs):
                 table.append([i, self.x1s[i], self.x2s[i], self.xrs[i], self.eas[i]])
         else:
             et = 0
-            xt = self.xt
             for i, _ in enumerate(self.xrs):
                 et = abs((xt - self.xrs[i])/xt)*100
                 table.append([i, self.x1s[i], self.x2s[i], self.xrs[i], self.eas[i], et])
@@ -95,11 +92,12 @@ def root_bisection(
             if option == StopOption.REL_ERROR:
                 res.eas.append(0)
                 res.iterations += 1
-                return res
+                break
         
         res.iterations += 1
         if should_stop(_ea, _rel_err, res.iterations, max_iterations, option):
             break
+    # FIXME: checar f(res.xr) != 0 e emitir alerta
     return res
 
 
@@ -147,10 +145,69 @@ def root_false_position(
             if option == StopOption.REL_ERROR:
                 res.eas.append(0)
                 res.iterations += 1
-                return res
+                break
         
         res.iterations += 1
         if should_stop(_ea, _rel_err, res.iterations, max_iterations, option):
             break
+    # FIXME: checar f(res.xr) != 0 e emitir alerta
+    return res
+    
+
+def root_false_position_mod(
+    f: Function, x1: float, x2: float, 
+    _rel_err: float = 0.01, max_iterations: int = MAX_ITER, 
+    option: StopOption = StopOption.REL_ERROR
+) -> ClosedResult:
+    '''
+    Divide um dos limites (x1 x2) pela metade quando percebe que tá travado.
+    '''
+
+    res = ClosedResult()
+    res.xr = 0
+    res.f = f
+    # OPT:
+    f1 = f(x1)
+    f2 = f(x2)
+    stuck_counter_1 = 0
+    stuck_counter_2 = 0
+
+    while True:
+        _ea = ea_alt(x1, x2)
+
+        res.x1s.append(x1)
+        res.x2s.append(x2)
+        res.eas.append(_ea)
+
+        res.xr = x2 -(f2*(x1-x2))/(f1 - f2)
+        fr = f(res.xr)
+        res.xrs.append(res.xr)
+    
+        test = f1*fr
+        if test < 0:
+            x2 = res.xr
+            f2 = f(x2)
+            stuck_counter_2 = 0
+            stuck_counter_1 += 1
+            if stuck_counter_1 >= 2:
+                f1 = f1/2
+        elif test > 0:
+            x1 = res.xr
+            f1 = f(x1)
+            stuck_counter_1 = 0
+            stuck_counter_2 += 1
+            if stuck_counter_2 >= 2:
+                f2 = f2 / 2
+        else:
+            # FIXME: parece gambiarra
+            if option == StopOption.REL_ERROR:
+                res.eas.append(0)
+                res.iterations += 1
+                break
+        
+        res.iterations += 1
+        if should_stop(_ea, _rel_err, res.iterations, max_iterations, option):
+            break
+    # FIXME: checar f(res.xr) != 0 e emitir alerta
     return res
     
