@@ -17,6 +17,8 @@ Pra executar um determinado exercício:
     python -m mne.exercises.chap1
 
 ### C
+Não tem muita coisa feita em C porque acabei trocando continuando com Python por 
+ser mais produtivo e flexível. Mas se você quiser testar, faça:
 
     cd tests
 
@@ -24,8 +26,7 @@ Se é a primeira vez executando os testes:
 
     ./build.sh 1 && ./test
 
-Nas builds subsequentes não é necessário passar argumentos para
-`./build.sh`:
+Nas builds subsequentes não é necessário passar argumentos para `./build.sh`:
 
     ./build.sh && ./test
 

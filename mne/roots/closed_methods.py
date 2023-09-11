@@ -81,7 +81,9 @@ def root_bisection(
             # OPT:
             f1 = fr
         else:
+            # FIXME: parece gambiarra
             res.eas.append(0)
+            res.iterations += 1
             return res
         
         res.iterations += 1
@@ -90,7 +92,53 @@ def root_bisection(
     return res
 
 
-def root_false_position(f: Function, x1: float, x2: float, rel_err: float = 0.01, iterations: int = MAX_ITER) -> ClosedResult:
+def root_false_position(
+    f: Function, x1: float, x2: float, 
+    _rel_err: float = 0.01, max_iterations: int = MAX_ITER, 
+    option: StopOption = StopOption.REL_ERROR
+) -> ClosedResult:
+    '''
+    O intervalo [x1, x2] não diminui na mesma velocidade que no mét. bisseção.
+
+    Ver exemplo `example_5_5.py`.
+    '''
+
     res = ClosedResult()
+    res.xr = 0
+    res.f = f
+    # OPT:
+    f1 = f(x1)
+
+    while True:
+        _ea = ea_alt(x1, x2)
+
+        res.x1s.append(x1)
+        res.x2s.append(x2)
+        res.eas.append(_ea)
+
+        res.xr = x2 -(f(x2)*(x1-x2))/(f(x1) - f(x2))
+        # res.xr = x2 - f(x2)*(x1-x2)/(f1 - f(x2))
+        # OPT:
+        fr = f(res.xr)
+        res.xrs.append(res.xr)
+    
+        # test = f(x1)*f(res.xr)
+        # OPT:
+        test = f1*fr
+        if test < 0:
+            x2 = res.xr
+        elif test > 0:
+            x1 = res.xr
+            # OPT:
+            f1 = fr
+        else:
+            # FIXME: parece gambiarra
+            res.eas.append(0)
+            res.iterations += 1
+            return res
+        
+        res.iterations += 1
+        if should_stop(_ea, _rel_err, res.iterations, max_iterations, option):
+            break
     return res
     

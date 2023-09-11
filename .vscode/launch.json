@@ -33,7 +33,7 @@
             "type": "python",
             "request": "launch",
             "cwd": "${workspaceFolder}",
-            "module": "mne.exercises.chap1.example_5_1"
+            "module": "mne.exercises.chap1.example_5_5"
         }
     ]
 }
