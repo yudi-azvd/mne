@@ -14,7 +14,7 @@ def main():
     ''' 
 
     res = root_false_position(f, 12, 16, max_iterations=4, option=StopOption.ITERATIONS)
-    print(res)
+    print(res.to_str())
 
 
 main()

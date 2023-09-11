@@ -10,7 +10,7 @@ def f(x: float) -> float:
     
 def main():
     res = root_bisection(f, 12, 16, _rel_err=0.5)
-    print(res)
+    print(res.to_str())
     plot_closed_result(res, step=0.05)
 
 
