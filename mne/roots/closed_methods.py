@@ -115,8 +115,8 @@ def root_false_position(
     res = ClosedResult()
     res.xr = 0
     res.f = f
-    # OPT:
     f1 = f(x1)
+    f2 = f(x2)
 
     while True:
         _ea = ea_alt(x1, x2)
@@ -125,20 +125,16 @@ def root_false_position(
         res.x2s.append(x2)
         res.eas.append(_ea)
 
-        res.xr = x2 -(f(x2)*(x1-x2))/(f(x1) - f(x2))
-        # res.xr = x2 - f(x2)*(x1-x2)/(f1 - f(x2))
-        # OPT:
+        res.xr = x2 - f2*(x1-x2)/(f1 - f2)
         fr = f(res.xr)
         res.xrs.append(res.xr)
     
-        # test = f(x1)*f(res.xr)
-        # OPT:
         test = f1*fr
         if test < 0:
             x2 = res.xr
+            f2 = fr
         elif test > 0:
             x1 = res.xr
-            # OPT:
             f1 = fr
         else:
             # FIXME: parece gambiarra
