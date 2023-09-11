@@ -27,18 +27,19 @@ class ClosedResult:
         self.xrs = []
         self.eas = []
 
-    def __repr__(self) -> str:
+    def to_str(self, xt: float | None = None) -> str:
         table = []
         if self.xt == None:
             for i, _ in enumerate(self.xrs):
                 table.append([i, self.x1s[i], self.x2s[i], self.xrs[i], self.eas[i]])
         else:
             et = 0
+            xt = self.xt
             for i, _ in enumerate(self.xrs):
-                et = abs((self.xt - self.xrs[i])/self.xt)*100
-                table.append([i, self.x1s[i], self.x2s[i], self.xrs[i], self.eas[i]], et)
+                et = abs((xt - self.xrs[i])/xt)*100
+                table.append([i, self.x1s[i], self.x2s[i], self.xrs[i], self.eas[i], et])
 
-        s = tabulate(table, headers=['i', 'x1', 'x2', 'xr', 'ea %'], floatfmt='.4f')
+        s = tabulate(table, headers=['i', 'x1', 'x2', 'xr', 'ea %', 'et %'], floatfmt='.4f')
         return s + f'\n\nroot {self.xr}'
 
 
@@ -58,14 +59,12 @@ def should_stop(
 
 def root_bisection(
     f: Function, x1: float, x2: float, 
-    xt: float | None = None,
     _rel_err: float = 0.01, max_iterations: int = MAX_ITER, 
     option: StopOption = StopOption.REL_ERROR
 ) -> ClosedResult:
 
     res = ClosedResult()
     res.xr = 0
-    res.xt = None
     res.f = f
     # OPT:
     f1 = f(x1)
@@ -106,7 +105,6 @@ def root_bisection(
 
 def root_false_position(
     f: Function, x1: float, x2: float, 
-    xt: float | None = None,
     _rel_err: float = 0.01, max_iterations: int = MAX_ITER, 
     option: StopOption = StopOption.REL_ERROR
 ) -> ClosedResult:
@@ -118,7 +116,6 @@ def root_false_position(
 
     res = ClosedResult()
     res.xr = 0
-    res.xt = xt
     res.f = f
     # OPT:
     f1 = f(x1)

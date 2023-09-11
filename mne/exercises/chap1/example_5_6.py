@@ -6,13 +6,19 @@ def f(x: float) -> float:
     
     
 def main():
-    res = root_bisection(f, 0, 1.3, max_iterations=5, option=StopOption.ITERATIONS)
+    x1 = 0
+    x2 = 1.3
+    iter = 5
+    option = StopOption.ITERATIONS
+    xt = 1
+
+    res = root_bisection(f, x1, x2, max_iterations=iter, option=option)
     print('> BISECTION')
-    print(res)
+    print(res.to_str(xt))
     print()
     print('> FALSE POSITION')
-    res = root_false_position(f, 0, 1.3, max_iterations=5, option=StopOption.ITERATIONS)
-    print(res)
+    res = root_false_position(f, x1, x2, max_iterations=iter, option=option)
+    print(res.to_str(xt))
 
 
 main()
