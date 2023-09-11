@@ -10,6 +10,7 @@ Function = Callable[[float], float]
 
 class ClosedResult:
     f: Function
+    xt: float | None
     xr: float = 0
     iterations: float = 0
     x1s: list[float] = []
@@ -18,6 +19,7 @@ class ClosedResult:
     eas: list[float] = []
 
     def __init__(self) -> None:
+        self.xt = None
         self.xr = 0
         self.iterations = 0
         self.x1s = []
@@ -27,8 +29,15 @@ class ClosedResult:
 
     def __repr__(self) -> str:
         table = []
-        for i, _ in enumerate(self.xrs):
-            table.append([i, self.x1s[i], self.x2s[i], self.xrs[i], self.eas[i]])
+        if self.xt == None:
+            for i, _ in enumerate(self.xrs):
+                table.append([i, self.x1s[i], self.x2s[i], self.xrs[i], self.eas[i]])
+        else:
+            et = 0
+            for i, _ in enumerate(self.xrs):
+                et = abs((self.xt - self.xrs[i])/self.xt)*100
+                table.append([i, self.x1s[i], self.x2s[i], self.xrs[i], self.eas[i]], et)
+
         s = tabulate(table, headers=['i', 'x1', 'x2', 'xr', 'ea %'], floatfmt='.4f')
         return s + f'\n\nroot {self.xr}'
 
@@ -49,12 +58,14 @@ def should_stop(
 
 def root_bisection(
     f: Function, x1: float, x2: float, 
+    xt: float | None = None,
     _rel_err: float = 0.01, max_iterations: int = MAX_ITER, 
     option: StopOption = StopOption.REL_ERROR
 ) -> ClosedResult:
 
     res = ClosedResult()
     res.xr = 0
+    res.xt = None
     res.f = f
     # OPT:
     f1 = f(x1)
@@ -82,9 +93,10 @@ def root_bisection(
             f1 = fr
         else:
             # FIXME: parece gambiarra
-            res.eas.append(0)
-            res.iterations += 1
-            return res
+            if option == StopOption.REL_ERROR:
+                res.eas.append(0)
+                res.iterations += 1
+                return res
         
         res.iterations += 1
         if should_stop(_ea, _rel_err, res.iterations, max_iterations, option):
@@ -94,6 +106,7 @@ def root_bisection(
 
 def root_false_position(
     f: Function, x1: float, x2: float, 
+    xt: float | None = None,
     _rel_err: float = 0.01, max_iterations: int = MAX_ITER, 
     option: StopOption = StopOption.REL_ERROR
 ) -> ClosedResult:
@@ -105,6 +118,7 @@ def root_false_position(
 
     res = ClosedResult()
     res.xr = 0
+    res.xt = xt
     res.f = f
     # OPT:
     f1 = f(x1)
@@ -133,9 +147,10 @@ def root_false_position(
             f1 = fr
         else:
             # FIXME: parece gambiarra
-            res.eas.append(0)
-            res.iterations += 1
-            return res
+            if option == StopOption.REL_ERROR:
+                res.eas.append(0)
+                res.iterations += 1
+                return res
         
         res.iterations += 1
         if should_stop(_ea, _rel_err, res.iterations, max_iterations, option):
