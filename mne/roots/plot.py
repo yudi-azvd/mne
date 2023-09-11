@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from mne.roots.closed_methods import Function
 
 
-def plot(f: Function, x1: float, x2: float):
+def plot(f: Function, x1: float, x2: float, path:str='img.png'):
     samples = 100
     xs = np.linspace(x1, x2, samples)
     values = np.full(samples, 0, np.float32)
@@ -14,4 +14,4 @@ def plot(f: Function, x1: float, x2: float):
         
     plt.grid(visible=True)
     plt.plot(xs, values)
-    plt.savefig('img.png')
+    plt.savefig(path)
