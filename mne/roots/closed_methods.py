@@ -2,7 +2,7 @@ from collections.abc import Callable
 from tabulate import tabulate
 from enum import Enum
 
-from mne.roots.common import ea_alt
+from mne.roots.common import ea_alt, ea
 
 MAX_ITER = 100_000
 
@@ -119,7 +119,7 @@ def root_false_position(
     f2 = f(x2)
 
     while True:
-        _ea = ea_alt(x1, x2)
+        _ea = ea(x1, x2)
 
         res.x1s.append(x1)
         res.x2s.append(x2)
@@ -169,7 +169,7 @@ def root_false_position_mod(
     stuck_counter_2 = 0
 
     while True:
-        _ea = ea_alt(x1, x2)
+        _ea = ea(x1, x2)
 
         res.x1s.append(x1)
         res.x2s.append(x2)
