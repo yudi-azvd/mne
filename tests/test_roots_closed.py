@@ -34,9 +34,6 @@ def test_false_position():
     xr = root_false_position(sqrt_of_2, 0, 2).xr
     assert approx(1.41, 0.01) == xr
     
-    xr = root_false_position(sqrt_of_2, 0, 2).xr
-    assert approx(1.41, 0.01) == xr
-
 
 def test_false_position_exact():
     xr = root_false_position(sqrt_of_4, 0, 4).xr

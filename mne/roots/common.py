@@ -1,6 +1,6 @@
 def ea(x: float, x_prev: float)-> float:
-    '''Erro aproximado relativo'''
-    return (x - x_prev)/x
+    '''Erro aproximado relativo percentual'''
+    return (x - x_prev)/x*100.0
 
 
 def ea_alt(x1: float, x2: float):
@@ -8,5 +8,4 @@ def ea_alt(x1: float, x2: float):
     
     ea = | (x2 - x1) / (x2 + x1) | * 100 %
     '''
-    return abs((x2 - x1) / (x2 + x1))*100
-
+    return abs((x2 - x1) / (x2 + x1))*100.0

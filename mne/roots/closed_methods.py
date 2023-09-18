@@ -103,13 +103,16 @@ def root_bisection(
 
 def root_false_position(
     f: Function, x1: float, x2: float, 
+    x0: float = 0.,
     _rel_err: float = 0.01, max_iterations: int = MAX_ITER, 
     option: StopOption = StopOption.REL_ERROR
 ) -> ClosedResult:
     '''
     O intervalo [x1, x2] não diminui na mesma velocidade que no mét. bisseção.
 
-    Ver exemplo `example_5_5.py`.
+    Ver exemplo `example_5_5.py`. 
+
+    Não funciona muito bem quando um dos limites é zero
     '''
 
     res = ClosedResult()
@@ -117,17 +120,20 @@ def root_false_position(
     res.f = f
     f1 = f(x1)
     f2 = f(x2)
+    prev_xr = x0
 
     while True:
-        _ea = ea(x1, x2)
-
         res.x1s.append(x1)
         res.x2s.append(x2)
-        res.eas.append(_ea)
 
         res.xr = x2 - f2*(x1-x2)/(f1 - f2)
+
         fr = f(res.xr)
         res.xrs.append(res.xr)
+        _ea = ea(res.xr, prev_xr)
+        res.eas.append(_ea)
+        
+        prev_xr = res.xr
     
         test = f1*fr
         if test < 0:
@@ -152,6 +158,7 @@ def root_false_position(
 
 def root_false_position_mod(
     f: Function, x1: float, x2: float, 
+    x0: float = 0.,
     _rel_err: float = 0.01, max_iterations: int = MAX_ITER, 
     option: StopOption = StopOption.REL_ERROR
 ) -> ClosedResult:
@@ -162,6 +169,7 @@ def root_false_position_mod(
     res = ClosedResult()
     res.xr = 0
     res.f = f
+    prev_xr = x0
     # OPT:
     f1 = f(x1)
     f2 = f(x2)
@@ -169,15 +177,17 @@ def root_false_position_mod(
     stuck_counter_2 = 0
 
     while True:
-        _ea = ea(x1, x2)
-
         res.x1s.append(x1)
         res.x2s.append(x2)
-        res.eas.append(_ea)
 
         res.xr = x2 -(f2*(x1-x2))/(f1 - f2)
+
         fr = f(res.xr)
         res.xrs.append(res.xr)
+        _ea = ea(res.xr, prev_xr)
+        res.eas.append(_ea)
+
+        prev_xr = res.xr
     
         test = f1*fr
         if test < 0:
