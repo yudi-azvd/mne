@@ -19,7 +19,7 @@ plt.style.use('dark_background')
 def plot_graph():
     x = np.random.randint(0, 10, 10)
     y = np.random.randint(0, 10, 10)
-    ax.scatter(x, y)
+    ax.scatter(x, y, c=['red'])
     global counter
     counter += 1
     print('plot', counter)

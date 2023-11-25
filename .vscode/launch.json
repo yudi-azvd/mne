@@ -33,7 +33,7 @@
             "type": "python",
             "request": "launch",
             "cwd": "${workspaceFolder}",
-            "module": "mne.exercises.lista1.q4",
+            "module": "mne.exercises.chap25.example_25_1",
         },
         {
             "name": "Python standalone",
