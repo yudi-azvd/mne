@@ -1,6 +1,6 @@
 def ea(x: float, x_prev: float)-> float:
     '''Erro aproximado relativo percentual'''
-    return (x - x_prev)/x*100.0
+    return abs((x - x_prev)/x*100.0)
 
 
 def ea_alt(x1: float, x2: float):

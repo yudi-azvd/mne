@@ -27,8 +27,8 @@ class OpenResult:
                 et = abs((xt - self.xrs[i])/xt)*100
                 table.append([i, self.xrs[i], self.eas[i], et])
 
-        s = tabulate(table, headers=['i', 'x1', 'x2', 'xr', 'ea %', 'et %'], floatfmt='.4f')
-        s += '\n'+ repr(self.eas)
+        s = tabulate(table, headers=['i', 'xr', 'ea %', 'et %'], floatfmt='.4f')
+        # s += '\n'+ repr(self.eas)
         return s + f'\n\nroot {self.xr}'
 
 
@@ -43,7 +43,7 @@ def root_nr(
         max_iterations = MAX_ITER
 
     res = OpenResult()
-    xr = 0
+    xr = x0
     prev_xr = x0
     iter = 0
     _ea = 0

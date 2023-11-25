@@ -1,4 +1,6 @@
 {
+    "ruff.enable": true,
+    "editor.formatOnSave": true,
     "C_Cpp.autoAddFileAssociations": true,
     "pythonTestExplorer.testFramework": "pytest",
     "python.testing.pytestArgs": [
