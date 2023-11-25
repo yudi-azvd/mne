@@ -13,7 +13,7 @@ def f_exact(x):
 
 
 if __name__ == '__main__':
-    h = 0.5
+    h = 0.3
 
     interval = np.arange(0, 4.1, h)
     N = len(interval)
@@ -31,7 +31,6 @@ if __name__ == '__main__':
         y_euler[i] = y
         y = euler(derivative, y, x, h)
         x += h
-        print(x, '%.2f' % y)
 
     errors_p = abs((y_true - y_euler) / y_true)
 
@@ -40,5 +39,6 @@ if __name__ == '__main__':
     ax1.plot(interval, y_euler, label='Euler')
     ax1.legend()
     ax2.plot(interval, errors_p, label='Erro %', c='r')
+    ax2.set_ylim(bottom=0, top=1.0)
     ax2.legend()
     plt.show()
