@@ -8,6 +8,7 @@ MAX_ITER = 100_000
 
 Function = Callable[[float], float]
 
+
 class ClosedResult:
     f: Function
     xr: float = 0
@@ -33,11 +34,15 @@ class ClosedResult:
         else:
             et = 0
             for i, _ in enumerate(self.xrs):
-                et = abs((xt - self.xrs[i])/xt)*100
-                table.append([i, self.x1s[i], self.x2s[i], self.xrs[i], self.eas[i], et])
+                et = abs((xt - self.xrs[i]) / xt) * 100
+                table.append(
+                    [i, self.x1s[i], self.x2s[i], self.xrs[i], self.eas[i], et]
+                )
 
-        s = tabulate(table, headers=['i', 'x1', 'x2', 'xr', 'ea %', 'et %'], floatfmt='.4f')
-        return s + f'\n\nroot {self.xr}'
+        s = tabulate(
+            table, headers=["i", "x1", "x2", "xr", "ea %", "et %"], floatfmt=".4f"
+        )
+        return s + f"\n\nroot {self.xr}"
 
 
 class StopOption(Enum):
@@ -46,20 +51,21 @@ class StopOption(Enum):
 
 
 def should_stop(
-    _ea: float, _rel_err: float, iter: int, 
-    max_iterations: int, option: StopOption
+    _ea: float, _rel_err: float, iter: int, max_iterations: int, option: StopOption
 ):
     if option == StopOption.REL_ERROR:
         return _ea < _rel_err or iter >= max_iterations
     return iter >= max_iterations
-    
+
 
 def root_bisection(
-    f: Function, x1: float, x2: float, 
-    _rel_err: float = 0.01, max_iterations: int = MAX_ITER, 
-    option: StopOption = StopOption.REL_ERROR
+    f: Function,
+    x1: float,
+    x2: float,
+    _rel_err: float = 0.01,
+    max_iterations: int = MAX_ITER,
+    option: StopOption = StopOption.REL_ERROR,
 ) -> ClosedResult:
-
     res = ClosedResult()
     res.xr = 0
     res.f = f
@@ -73,14 +79,14 @@ def root_bisection(
         res.x2s.append(x2)
         res.eas.append(_ea)
 
-        res.xr = (x1 + x2)/2
+        res.xr = (x1 + x2) / 2
         # OPT:
         fr = f(res.xr)
         res.xrs.append(res.xr)
-    
+
         # test = f(x1)*f(res.xr)
         # OPT:
-        test = f1*fr
+        test = f1 * fr
         if test < 0:
             x2 = res.xr
         elif test > 0:
@@ -93,7 +99,7 @@ def root_bisection(
                 res.eas.append(0)
                 res.iterations += 1
                 break
-        
+
         res.iterations += 1
         if should_stop(_ea, _rel_err, res.iterations, max_iterations, option):
             break
@@ -102,18 +108,21 @@ def root_bisection(
 
 
 def root_false_position(
-    f: Function, x1: float, x2: float, 
-    x0: float = 0.,
-    _rel_err: float = 0.01, max_iterations: int = MAX_ITER, 
-    option: StopOption = StopOption.REL_ERROR
+    f: Function,
+    x1: float,
+    x2: float,
+    x0: float = 0.0,
+    _rel_err: float = 0.01,
+    max_iterations: int = MAX_ITER,
+    option: StopOption = StopOption.REL_ERROR,
 ) -> ClosedResult:
-    '''
+    """
     O intervalo [x1, x2] não diminui na mesma velocidade que no mét. bisseção.
 
-    Ver exemplo `example_5_5.py`. 
+    Ver exemplo `example_5_5.py`.
 
     Não funciona muito bem quando um dos limites é zero
-    '''
+    """
 
     res = ClosedResult()
     res.xr = 0
@@ -126,16 +135,16 @@ def root_false_position(
         res.x1s.append(x1)
         res.x2s.append(x2)
 
-        res.xr = x2 - f2*(x1-x2)/(f1 - f2)
+        res.xr = x2 - f2 * (x1 - x2) / (f1 - f2)
 
         fr = f(res.xr)
         res.xrs.append(res.xr)
         _ea = ea(res.xr, prev_xr)
         res.eas.append(_ea)
-        
+
         prev_xr = res.xr
-    
-        test = f1*fr
+
+        test = f1 * fr
         if test < 0:
             x2 = res.xr
             f2 = fr
@@ -148,23 +157,26 @@ def root_false_position(
                 res.eas.append(0)
                 res.iterations += 1
                 break
-        
+
         res.iterations += 1
         if should_stop(_ea, _rel_err, res.iterations, max_iterations, option):
             break
     # FIXME: checar f(res.xr) != 0 e emitir alerta
     return res
-    
+
 
 def root_false_position_mod(
-    f: Function, x1: float, x2: float, 
-    x0: float = 0.,
-    _rel_err: float = 0.01, max_iterations: int = MAX_ITER, 
-    option: StopOption = StopOption.REL_ERROR
+    f: Function,
+    x1: float,
+    x2: float,
+    x0: float = 0.0,
+    _rel_err: float = 0.01,
+    max_iterations: int = MAX_ITER,
+    option: StopOption = StopOption.REL_ERROR,
 ) -> ClosedResult:
-    '''
+    """
     Divide um dos limites (x1 x2) pela metade quando percebe que tá travado.
-    '''
+    """
 
     res = ClosedResult()
     res.xr = 0
@@ -180,7 +192,7 @@ def root_false_position_mod(
         res.x1s.append(x1)
         res.x2s.append(x2)
 
-        res.xr = x2 -(f2*(x1-x2))/(f1 - f2)
+        res.xr = x2 - (f2 * (x1 - x2)) / (f1 - f2)
 
         fr = f(res.xr)
         res.xrs.append(res.xr)
@@ -188,15 +200,15 @@ def root_false_position_mod(
         res.eas.append(_ea)
 
         prev_xr = res.xr
-    
-        test = f1*fr
+
+        test = f1 * fr
         if test < 0:
             x2 = res.xr
             f2 = f(x2)
             stuck_counter_2 = 0
             stuck_counter_1 += 1
             if stuck_counter_1 >= 2:
-                f1 = f1/2
+                f1 = f1 / 2
         elif test > 0:
             x1 = res.xr
             f1 = f(x1)
@@ -210,10 +222,9 @@ def root_false_position_mod(
                 res.eas.append(0)
                 res.iterations += 1
                 break
-        
+
         res.iterations += 1
         if should_stop(_ea, _rel_err, res.iterations, max_iterations, option):
             break
     # FIXME: checar f(res.xr) != 0 e emitir alerta
     return res
-    
