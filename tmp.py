@@ -7,8 +7,9 @@ import tkinter as tk
 import customtkinter as ctk
 import numpy as np
 
-ctk.set_appearance_mode('System')
 ctk.set_default_color_theme('blue')
+print(ctk.ThemeManager.theme)
+
 
 counter = 0
 # https://stackoverflow.com/questions/48391568/matplotlib-creating-plot-for-black-background-presentation-slides
@@ -33,7 +34,16 @@ def on_close():
 
 
 root = tk.Tk()
-
+# https://stackoverflow.com/questions/4581504/how-to-set-opacity-of-background-colour-of-graph-with-matplotlib
+plt.rcParams.update(
+    {
+        # Não é equivalente ao debaixo
+        # 'figure.facecolor': (1.0, 1.0, 1.0, 0.14),
+        # 'axes.facecolor': (1.0, 1.0, 1.0, 0.14),
+        'figure.facecolor': (0.14, 0.14, 0.14, 1.0),
+        'axes.facecolor': (0.14, 0.14, 0.14, 1.0),
+    }
+)
 fig, ax = plt.subplots()
 
 _canvas = FigureCanvasTkAgg(fig, master=root)
