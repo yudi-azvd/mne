@@ -10,11 +10,13 @@ def f(x: float) -> float:
     g = 9.81
     t = 4
     v = 36
-    return g*m/x*(1 - exp(-t*x/m)) - v
-    
-    
+    return g * m / x * (1 - exp(-t * x / m)) - v
+
+
 x1 = 3
 x2 = 5
+
+
 def main():
     res = root_bisection(f, x1, x2, _rel_err=2)
     print(res.to_str())

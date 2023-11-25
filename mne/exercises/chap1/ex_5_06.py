@@ -6,11 +6,13 @@ from mne.roots.plot import plot
 
 
 def f(x: float) -> float:
-    return log(x*x)-.7
-    
-    
-x1 = .5
+    return log(x * x) - 0.7
+
+
+x1 = 0.5
 x2 = 2
+
+
 def main():
     res = root_bisection(f, x1, x2, max_iterations=3, option=StopOption.ITERATIONS)
     print(res.to_str())

@@ -40,9 +40,9 @@ class ClosedResult:
                 )
 
         s = tabulate(
-            table, headers=["i", "x1", "x2", "xr", "ea %", "et %"], floatfmt=".4f"
+            table, headers=['i', 'x1', 'x2', 'xr', 'ea %', 'et %'], floatfmt='.4f'
         )
-        return s + f"\n\nroot {self.xr}"
+        return s + f'\n\nroot {self.xr}'
 
 
 class StopOption(Enum):

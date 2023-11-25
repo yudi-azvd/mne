@@ -2,11 +2,11 @@ from mne.roots.open_methods import root_nr
 
 
 def f(x: float):
-    return 2*x**3 - 11.7*x**2 + 17.7*x - 5
+    return 2 * x**3 - 11.7 * x**2 + 17.7 * x - 5
 
 
 def fprime(x: float):
-    return 6*x**2 - 23.4*x + 17.7
+    return 6 * x**2 - 23.4 * x + 17.7
 
 
 x0 = 3
