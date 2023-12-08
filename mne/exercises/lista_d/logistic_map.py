@@ -1,14 +1,13 @@
 import matplotlib.pyplot as plt
 import numpy as np
-import math
 
-samples = 500
+time_samples = 1000
 x0 = 0.4
 x = x0
 r = 2.6
-total_time = 100
+total_time = 500
 time_span = np.linspace(0, total_time, total_time)
-rates = np.linspace(0, 4, samples)
+rates = np.linspace(0, 4, time_samples)
 
 
 list_of_repeated_values = []
@@ -19,15 +18,8 @@ def close_to_any(a: float, values: list[float], **kwargs):
 
 
 def get_repeated_points(r: float, values: list[float]):
-    """Com o aumento de r, os valores finais da população começam a oscilar em
-    pontos com determinados períodos."""
-
     xs: list[float] = []
     ys: list[float] = []
-    # global_min = +math.inf
-    # global_max = -math.inf
-    # curr_min = +math.inf
-    # curr_max = -math.inf
 
     if r < 3:
         ys.append(values[-1])
@@ -41,8 +33,6 @@ def get_repeated_points(r: float, values: list[float]):
         else:
             ys.append(v)
             xs.append(r)
-            # if len(ys) > 16:
-            #     break
 
     list_of_repeated_values.append(ys)
     return xs, ys
@@ -74,6 +64,6 @@ fig.suptitle('Mapa logístico: G(x) = r x (1-x)')
 ax1.plot(time_span, population_values_r[i])
 ax1.set_ylim((-0.1, 1))
 
-ax2.scatter(_x, _y, s=0.05, alpha=0.7, c='k')
+ax2.scatter(_x, _y, s=0.05, alpha=0.3, c='k')
 
 plt.show()
