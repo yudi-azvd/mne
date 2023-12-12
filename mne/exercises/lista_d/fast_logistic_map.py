@@ -8,6 +8,9 @@ def logistic_map(x: float, r: float):
     """
     Umas observações interessantes sobre mapa logístico:
     https://blbadger.github.io/logistic-map.html
+
+    Investigar: "Period-3 implies chaos"
+    https://www.johndcook.com/blog/2021/04/09/period-three-implies-chaos/
     """
     return x * r * (1 - x)
 

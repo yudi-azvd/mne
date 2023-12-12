@@ -1,4 +1,13 @@
+<br />
+<div align="center">
+  <a href="https://github.com/othneildrew/Best-README-Template">
+    <img src="docs/bifurcacao.png" alt="Logo" width="200" height="200">
+  </a>
+</div>
+
 # Métodos Numéricos para Engenharia
+
+Uns códigos aí que foram feitos durante a disciplina.
 
 ## Dependências 
 

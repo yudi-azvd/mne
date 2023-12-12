@@ -29,9 +29,9 @@ def simulate(x0, rate_span: np.ndarray):
 
 markersize = 0.05
 x0 = 0.3
-r_inicio = 3.48
+r_inicio = 2.5
 r_fim = 4.0
-r_samples = 8000
+r_samples = 16000
 r_span = np.linspace(r_inicio, r_fim, r_samples)
 x, y = simulate(x0, r_span)
 
