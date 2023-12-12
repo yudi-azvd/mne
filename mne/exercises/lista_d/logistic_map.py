@@ -1,9 +1,12 @@
 import matplotlib.pyplot as plt
 import numpy as np
+from numpy import ndarray
+
+plt.style.use('dark_background')
+
 
 x0 = 0.4
-x = x0
-time_samples = 600
+time_samples = 500
 time_end = time_samples
 time_span = np.linspace(0, time_end, time_samples)
 
@@ -24,13 +27,12 @@ def get_last_100_values(r: float, values: list[float]):
 
 
 population_values_r: list[list[float]] = []
-final_populations: list[float] = []
 
 fig, (ax1, ax2) = plt.subplots(1, 2)
 fig.suptitle('Mapa logístico: G(x) = r x (1-x)')
 
 
-def simulate(rate_span):
+def simulate(x0: float = 0.4, rate_span: ndarray = [], time_span: ndarray = []):
     _x = []
     _y = []
     for r in rate_span:
@@ -40,24 +42,37 @@ def simulate(rate_span):
             x = r * x * (1.0 - x)
             pop_values.append(x)
         population_values_r.append(pop_values)
-        final_populations.append(pop_values[-1])
         xs, ys = get_last_100_values(r, pop_values)
         _x.extend(xs)
         _y.extend(ys)
-
-        # ax1.plot(time_span, pop_values)
-        # ax2.scatter(xs, ys, s=0.05, alpha=0.3, c='k')
-        # plt.show()
     return _x, _y
 
 
-x, y = simulate(time_span)
+def simulate_time_span(x0, r, time_span):
+    _x = []
+    _y = []
+    x = x0
+    for i in range(len(time_span)):
+        x = r * x * (1.0 - x)
+        _x.append(i)
+        _y.append(x)
+    return _x, _y
 
 
-i = int(len(rate_span) * 0.65)
-# ax1.plot(time_span, population_values_r[i])
+x0 = 0.4
+x, y = simulate_time_span(x0, 3.3, time_span)
+ax1.set_ylim((0, 1))
+ax1.set_xlim((-1, 30))
+ax1.plot(x, y)
+
+x, y = simulate(x0, rate_span, time_span)
+ax2.plot(x, y, '^', markersize=0.13, alpha=0.3)
+
+# r = 3.1
+# i = int(len(rate_span) * 0.774)
+# print('i', i, 'rate = ', rate_span[i])
 # ax1.set_ylim((-0.1, 1))
-
-ax2.scatter(x, y, s=0.05, alpha=0.3, c='k')
+# ax1.set_xlim((-1, 30))
+# ax1.plot(time_span, population_values_r[i])
 
 plt.show()
