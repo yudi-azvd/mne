@@ -44,16 +44,16 @@ def plot_r(
 
 
 # fig, (ax1, ax2, ax3) = plt.subplots(1, 3)
-fig, (ax1, ax2) = plt.subplots(1, 2)
+fig, (ax1, ax2) = plt.subplots(1, 1)
 fig.suptitle('Mapa logístico: $G(x) = rx(1-x)$')
 
 r_inicio = 2.6
 r_fim = 4.0
-plot_r(ax1, r_inicio, r_fim, markersize=0.05)
+# plot_r(ax1, r_inicio, r_fim, markersize=0.05, rate_samples=1000)
 
-r_inicio = 3.62
+r_inicio = 3.5
 r_fim = 4
-plot_r(ax2, r_inicio, r_fim, markersize=0.1, rate_samples=4000)
+plot_r(ax2, r_inicio, r_fim, markersize=0.05, rate_samples=8000)
 
 # r_inicio = 3.82
 # r_fim = 3.86

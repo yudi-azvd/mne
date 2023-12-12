@@ -7,13 +7,14 @@ plt.style.use('dark_background')
 
 x0 = 0.4
 time_samples = 500
+time_start = 1.1
 time_end = time_samples
-time_span = np.linspace(0, time_end, time_samples)
+time_span = np.linspace(time_start, time_end, time_samples)
 
-rate_samples = 1000
+r_samples = 1000
 r_start = 0
 r_end = 4
-rate_span = np.linspace(r_start, r_end, rate_samples)
+r_span = np.linspace(r_start, r_end, r_samples)
 
 
 def get_last_100_values(r: float, values: list[float]):
@@ -49,23 +50,28 @@ def simulate(x0: float = 0.4, rate_span: ndarray = [], time_span: ndarray = []):
 
 
 def simulate_time_span(x0, r, time_span):
-    _x = []
-    _y = []
     x = x0
+    _y = []
+    _x = []
     for i in range(len(time_span)):
-        x = r * x * (1.0 - x)
-        _x.append(i)
         _y.append(x)
+        _x.append(i)
+        x = r * x * (1.0 - x)
     return _x, _y
 
 
-x0 = 0.4
-x, y = simulate_time_span(x0, 3.3, time_span)
 ax1.set_ylim((0, 1))
-ax1.set_xlim((-1, 30))
+ax1.set_xlim((-1, 100))
+r = 3.68
+x0 = 0.30
+x, y = simulate_time_span(x0, r, time_span)
 ax1.plot(x, y)
 
-x, y = simulate(x0, rate_span, time_span)
+x0 = 0.50
+x, y = simulate_time_span(x0, r, time_span)
+# ax1.plot(x, y)
+
+x, y = simulate(x0, r_span, time_span)
 ax2.plot(x, y, '^', markersize=0.13, alpha=0.3)
 
 # r = 3.1
