@@ -2,34 +2,43 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
-x0 = 0.4
-r_start = 3.63
-r_end = 3.6325
-rate_samples = 1600
-rate_span = np.linspace(r_start, r_end, rate_samples)
-
-
-def logistic_map(x: float, r: float):
+def mapa_logistico(x: float, r: float):
     return x * r * (1 - x)
 
 
-population_values_r: list[list[float]] = []
-final_populations: list[float] = []
+def simular(x0, rate_span):
+    _x = []
+    _y = []
+    for r in rate_span:
+        x = x0
+        for _ in range(500):
+            x = mapa_logistico(x, r)
 
-_x = []
-_y = []
+        for i in range(100):
+            x = mapa_logistico(x, r)
+            _x.append(r)
+            _y.append(x)
+    return _x, _y
 
-for r in rate_span:
-    x = x0
-    for i in range(500):
-        x = logistic_map(x, r)
 
-    for i in range(100):
-        x = logistic_map(x, r)
-        _x.append(r)
-        _y.append(x)
+def plotar(
+    ax, r_inicio: float = 0, r_fim: float = 4, markersize: float = 0.013
+) -> None:
+    x0 = 0.4
+    r_amostras = 1000
+    r_intervalo = np.linspace(r_inicio, r_fim, r_amostras)
+    x, y = simular(x0, r_intervalo)
+    ax.plot(x, y, '^', alpha=0.4, markersize=markersize)
+    return
 
-plt.ylim((-0.1, 1))
-plt.title('Mapa logístico: G(x) = r x (1-x)')
-plt.scatter(_x, _y, s=0.05, alpha=0.2, c='k')
+
+fig, (ax1, ax2) = plt.subplots(1, 2)
+fig.suptitle('Mapa logístico: $G(x) = rx(1-x)$')
+
+ax1.set_title('Plot 1')
+plotar(ax1, r_inicio=2.6, r_fim=4, markersize=0.05)
+
+ax2.set_title('Plot 2')
+plotar(ax2, r_inicio=3.62, r_fim=3.64, markersize=0.1)
+
 plt.show()
